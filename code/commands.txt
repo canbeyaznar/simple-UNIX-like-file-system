@@ -1,0 +1,22 @@
+makeFileSystem 4 400 mySystem.data
+fileSystemOper mySystem.data mkdir “/usr”
+fileSystemOper mySystem.data mkdir “/usr/ysa”
+fileSystemOper mySystem.data mkdir “/bin/ysa” ; Should print error!
+fileSystemOper mySystem.data write “/usr/ysa/file1” linuxFile.data
+fileSystemOper mySystem.data write “/usr/file2” linuxFile.data
+fileSystemOper mySystem.data write “/file3” linuxFile.data
+fileSystemOper mySystem.data list “/” ; Should list 1 dir, 1 file
+fileSystemOper mySystem.data del “/usr/ysa/file1”
+fileSystemOper mySystem.data dumpe2fs
+fileSystemOper mySystem.data read “/usr/file2” linuxFile2.data
+cmp linuxFile2.data linuxFile.data ; Should not print any difference
+fileSystemOper mySystem.data ln “/usr/file2” “/usr/linkedfile2”
+fileSystemOper mySystem.data list “/usr"
+fileSystemOper mySystem.data write “/usr/linkedfile2” linuxFile.data ; should print error
+fileSystemOper mySystem.data dumpe2fs ;should print 2 inode
+fileSystemOper mySystem.data list “/usr" ;should list 1 dir, 2 file (ysa, file2, linkedfile2)
+fileSystemOper mySystem.data del “/usr/file2”
+fileSystemOper mySystem.data list “/usr" ; should list 1 dir, 1 file (ysa and linkedfile2)
+fileSystemOper mySystem.data dumpe2fs
+fileSystemOper mySystem.data fsck
+
